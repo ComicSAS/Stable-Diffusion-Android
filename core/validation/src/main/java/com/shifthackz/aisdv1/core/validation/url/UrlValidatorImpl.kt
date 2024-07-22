@@ -3,8 +3,11 @@ package com.shifthackz.aisdv1.core.validation.url
 import android.util.Patterns
 import android.webkit.URLUtil
 import com.shifthackz.aisdv1.core.validation.ValidationResult
+import java.util.regex.Pattern
 
-internal class UrlValidatorImpl : UrlValidator {
+internal class UrlValidatorImpl(
+    private val webUrlPattern: Pattern = Patterns.WEB_URL,
+) : UrlValidator {
 
     override operator fun invoke(input: String?): ValidationResult<UrlValidator.Error> = when {
         input == null -> ValidationResult(
@@ -27,7 +30,7 @@ internal class UrlValidatorImpl : UrlValidator {
             isValid = false,
             validationError = UrlValidator.Error.Invalid,
         )
-        !Patterns.WEB_URL.matcher(input).matches() -> ValidationResult(
+        !webUrlPattern.matcher(input).matches() -> ValidationResult(
             isValid = false,
             validationError = UrlValidator.Error.Invalid,
         )
